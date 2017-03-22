@@ -79,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, String.valueOf(calendar.getTimeInMillis()));
     }
 
+    @OnClick(R.id.testButton)
+    public void openAlarm(){
+        Intent alarmIntent = new Intent(this,AlarmActivity.class);
+        startActivity(alarmIntent);
+    }
+
 
 }
 

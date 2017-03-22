@@ -15,6 +15,8 @@ import butterknife.OnClick;
 public class SettingsActivity extends AppCompatActivity {
 
     public static final String TAG = "alarm_shared_preferences";
+    public static final String HOUR_KEY = "hour";
+    public static final String MINUTES_KEY = "minutes";
     SharedPreferences sharedPreferences;
 
     @BindView(R.id.SettingsTimePicker)
@@ -28,18 +30,39 @@ public class SettingsActivity extends AppCompatActivity {
         timePicker.setIs24HourView(true);
         sharedPreferences = getSharedPreferences(TAG, MODE_PRIVATE);
     }
-    @OnClick(R.id.SetButton)
-    public void setSettings(){
-        Calendar calendar = Calendar.getInstance();
-        int hour;
-        int minutes;
 
+    @OnClick(R.id.SetButton)
+    public void setSettings() {
+        Calendar calendar = Calendar.getInstance();
+        int hour = getHour();
+        int minutes = getMinutes();
+        saveDataToSharedPreferences(hour, minutes);
+    }
+
+    private int getMinutes() {
+        int minutes;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            hour = timePicker.getHour();
             minutes = timePicker.getMinute();
         } else {
-            hour = timePicker.getCurrentHour();
             minutes = timePicker.getCurrentMinute();
         }
+        return minutes;
+    }
+
+    private int getHour() {
+        int hour;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            hour = timePicker.getHour();
+        } else {
+            hour = timePicker.getCurrentHour();
+        }
+        return hour;
+    }
+
+    private void saveDataToSharedPreferences(int hour, int minutes) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(HOUR_KEY, hour);
+        editor.putInt(MINUTES_KEY, minutes);
+        editor.apply();
     }
 }
